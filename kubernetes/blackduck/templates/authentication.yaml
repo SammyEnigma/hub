@@ -82,7 +82,6 @@ spec:
     spec:
       {{- if .Values.enableInitContainer }}
       initContainers:
-      {{- include "bd.datadog.java.initcontainer" . | indent 6 }}
       {{- include "bd.postgresql.up.check.initcontainer" . | indent 6 }}
       {{- end }}
       containers:
@@ -93,9 +92,6 @@ spec:
         - name: HUB_MIN_MEMORY
           value: {{ .Values.authentication.hubMinMemory }}
         {{- end }}
-        {{- include "bd.datadog.java.env" . | indent 8 }}
-        - name: DD_ENABLED
-          value: {{ .Values.datadog.enabled | quote }}
         - name: HUB_MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED
           value: {{ .Values.metrics.enabled | quote }}
         envFrom:
@@ -131,7 +127,6 @@ spec:
         {{- end }}
         volumeMounts:
         {{- include "bd.ale.volumemounts" . | indent 8 }}
-        {{- include "bd.datadog.java.volumemount" . | indent 8 }}
         {{- include "bd.postgresql.secrets.volumemounts" . | indent 8 }}
         - mountPath: /opt/blackduck/hub/hub-authentication/ldap
           name: dir-authentication
@@ -168,7 +163,6 @@ spec:
       {{- end }}
       serviceAccountName: {{ .Release.Name }}-blackduck-service-account
       volumes:
-      {{- include "bd.datadog.java.volume" . | indent 6 }}
       {{- include "authenticationPersistentStorage" . | nindent 6 }}
       {{- include "bd.postgresql.secrets.volumes" . | indent 6 }}
       - emptyDir: {}

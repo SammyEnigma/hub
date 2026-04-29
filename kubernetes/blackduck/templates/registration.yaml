@@ -82,7 +82,6 @@ spec:
     spec:
       {{- if .Values.enableInitContainer }}
       initContainers:
-      {{- include "bd.datadog.java.initcontainer" . | indent 6 }}
       {{- include "bd.postgresql.up.check.initcontainer" . | indent 6 }}
       {{- end }}
       containers:
@@ -98,10 +97,7 @@ spec:
           value: {{ quote .Values.registration.dbPoolMaxActive }}
         {{- else }}
           value: {{ quote .Values.dbPoolMaxActive }}
-        {{- end -}}
-        {{- include "bd.datadog.java.env" . | indent 8 }}
-        - name: DD_ENABLED
-          value: {{ .Values.datadog.enabled | quote }}
+        {{- end }}
         - name: HUB_MANAGEMENT_ENDPOINT_PROMETHEUS_ENABLED
           value: {{ .Values.metrics.enabled | quote }}
         envFrom:
@@ -133,7 +129,6 @@ spec:
 {{ toYaml . | indent 10 }}
         {{- end }}
         volumeMounts:
-        {{- include "bd.datadog.java.volumemount" . | indent 8 }}
         - mountPath: /opt/blackduck/hub/hub-registration/config
           name: dir-registration
         - mountPath: /opt/blackduck/hub/hub-registration/security
@@ -164,7 +159,6 @@ spec:
       serviceAccountName: {{ .Release.Name }}-blackduck-service-account
       restartPolicy: Always
       volumes:
-      {{- include "bd.datadog.java.volume" . | indent 6 }}
       {{- include "registrationPersistentStorage" . | nindent 6 }}
       - emptyDir: {}
         name: dir-registration-security

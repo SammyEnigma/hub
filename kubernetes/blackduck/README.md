@@ -276,7 +276,7 @@ The following table lists the configurable parameters of the Black Duck chart an
 | Parameter                  | Description                                                                                                                                                    | Default                                                                                                                                                                                    |
 |----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `registry`                 | Image repository                                                                                                                                               | `docker.io/blackducksoftware`                                                                                                                                                              |
-| `imageTag`                 | Version of Black Duck                                                                                                                                          | `2026.1.1`                                                                                                                                                                                |
+| `imageTag`                 | Version of Black Duck                                                                                                                                          | `2026.4.0`                                                                                                                                                                                |
 | `imagePullSecrets`         | Reference to one or more secrets to be used when pulling images                                                                                                | `[]`                                                                                                                                                                                       |
 | `tlsCertSecretName`        | Name of Webserver TLS Secret containing Certificates (if not provided Certificates will be generated)                                                          |                                                                                                                                                                                            |
 | `exposeui`                 | Enable Black Duck Web Server User Interface (UI)                                                                                                               | `true`                                                                                                                                                                                     |
@@ -383,7 +383,7 @@ The following table lists the configurable parameters of the Black Duck chart an
 | Parameter                                 | Description                                        | Default                  |
 |-------------------------------------------|----------------------------------------------------|--------------------------|
 | `binaryscanner.registry`                  | Image repository to be override at container level | `docker.io/blackducksoftware`  |
-| `binaryscanner.imageTag`                  | Image tag to be override at container level        | `2025.12.5` |
+| `binaryscanner.imageTag`                  | Image tag to be override at container level        | `2026.3.1` |
 | `binaryscanner.resources.limits.Cpu`      | Binary Scanner container CPU Limit                 | `1000m`                  |
 | `binaryscanner.resources.requests.Cpu`    | Binary Scanner container CPU request               | `1000m`                  |
 | `binaryscanner.resources.limits.memory`   | Binary Scanner container Memory Limit              | `2048Mi`                 |
@@ -399,7 +399,7 @@ The following table lists the configurable parameters of the Black Duck chart an
 | Parameter                         | Description                                              | Default          |
 |-----------------------------------|----------------------------------------------------------|------------------|
 | `cfssl.registry`                  | Image repository to be override at container level       |                  |
-| `cfssl.imageTag`                  | Image tag to be override at container level              | `1.0.35` |
+| `cfssl.imageTag`                  | Image tag to be override at container level              | `1.0.36` |
 | `cfssl.resources.limits.memory`   | Cfssl container Memory Limit                             | `640Mi`          |
 | `cfssl.resources.requests.memory` | Cfssl container Memory request                           | `640Mi`          |
 | `cfssl.persistentVolumeClaimName` | Point to an existing Cfssl Persistent Volume Claim (PVC) |                  |
@@ -612,7 +612,7 @@ storage:
 | Parameter                             | Description                                        | Default          |
 |---------------------------------------|----------------------------------------------------|------------------|
 | `webserver.registry`                  | Image repository to be override at container level |                  |
-| `webserver.imageTag`                  | Image tag to be override at container level        | `2026.1.1` |
+| `webserver.imageTag`                  | Image tag to be override at container level        | `2026.4.0` |
 | `webserver.resources.limits.memory`   | Webserver container Memory Limit                   | `512Mi`          |
 | `webserver.resources.requests.memory` | Webserver container Memory request                 | `512Mi`          |
 | `webserver.nodeSelector`              | Webserver node labels for pod assignment           | `{}`             |
@@ -638,15 +638,6 @@ storage:
 | `integration.affinity`                  | Integration node affinity for pod assignment                                    | `{}`     |
 | `integration.podSecurityContext`        | Integration security context at pod level                                       | `{}`     |
 | `integration.securityContext`           | Integration security context at container level                                 | `{}`     |
-
-### Datadog Pod Configuration
-
-| Parameter                 | Description                                                                | Default            |
-|---------------------------|----------------------------------------------------------------------------|--------------------|
-| `datadog.enable`          | only true for hosted customers (Values.enableInitContainer should be true) | false              |
-| `datadog.registry`        | Image repository to be override at container level                         |                    |
-| `datadog.imageTag`        | Image tag to be override at container level                                | `1.0.17` |
-| `datadog.imagePullPolicy` | Image pull policy                                                          | IfNotPresent       |
 
 ### Footnotes
 
