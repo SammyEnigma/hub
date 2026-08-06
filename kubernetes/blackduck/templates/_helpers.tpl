@@ -73,6 +73,17 @@ BLACKDUCK_ORCHESTRATION_TYPE: OPENSHIFT
 {{- end }}
 
 {{/*
+Binary scanner environment variables.
+*/}}
+{{- define "binaryscanner.environs" }}
+{{- if or .Values.enableBinaryScanner }}
+{{- range $key, $value := .Values.binaryscanner.environs }}
+{{ $key }}: {{ $value | quote }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+{{/*
 Create chart name and version as used by the chart label.
 */}}
 {{- define "bd.chart" -}}

@@ -50,9 +50,9 @@ services:
   logstash:
     read_only: true
     volumes:
-      - /opt/bitnami/logstash/config
-      - /opt/bitnami/logstash/data
-      - /usr/share/logstash
+      - /usr/share/logstash/config
+      - /usr/share/logstash/pipeline
+      - /usr/share/logstash/data
       - /var/log
       - /tmp
   registration:

@@ -41,7 +41,7 @@ set -o noglob
 
 readonly NOW="$(date +"%Y%m%dT%H%M%S%z")"
 readonly NOW_ZULU="$(date -u +"%Y%m%dT%H%M%SZ")"
-readonly HUB_VERSION="${HUB_VERSION:-2026.4.2}"
+readonly HUB_VERSION="${HUB_VERSION:-2026.7.0}"
 readonly OUTPUT_FILE="${SYSTEM_CHECK_OUTPUT_FILE:-system_check_${NOW}.txt}"
 readonly PROPERTIES_FILE="${SYSTEM_CHECK_PROPERTIES_FILE:-${OUTPUT_FILE%.txt}.properties}"
 readonly SUMMARY_FILE="${SYSTEM_CHECK_SUMMARY_FILE:-${OUTPUT_FILE%.txt}_summary.properties}"
@@ -2544,10 +2544,10 @@ _get_container_size_info() {
                     fi;;
                 (blackducksoftware/blackduck-registration*)
                     service="hub_registration";;
-                (blackducksoftware/blackduck-scan*)
-                    service="hub_scan";;
                 (blackducksoftware/blackduck-scanmatch*)
                     service="hub_scanmatch";;
+                (blackducksoftware/blackduck-scan*)
+                    service="hub_scan";;
                 (blackducksoftware/blackduck-storage*)
                     service="hub_storage";;
                 (blackducksoftware/blackduck-webapp*)
@@ -4087,6 +4087,37 @@ get_snippet_invalid_basedir_count() {
 }
 
 ################################################################
+# Gather information about database settings
+#
+# Globals:
+#   DATABASE_SETTINGS -- (out) database settings information message
+# Arguments:
+#   None
+# Returns:
+#   None
+################################################################
+get_database_settings() {
+    if [[ -z "$DATABASE_SETTINGS" ]]; then
+        if ! is_docker_present ; then
+            readonly DATABASE_SETTINGS="$UNKNOWN -- docker not installed."
+            return
+        elif ! is_docker_usable ; then
+            readonly DATABASE_SETTINGS="$UNKNOWN -- cannot access docker."
+            return
+        elif ! is_postgresql_container_running ; then
+            readonly DATABASE_SETTINGS="$UNKNOWN -- postgres container not found."
+            return
+        fi
+
+        local -r postgres_container_id=$(docker container ls --format '{{.ID}} {{.Image}}' | grep -aF "blackducksoftware/blackduck-postgres:" | cut -d' ' -f1)
+        readonly DATABASE_SETTINGS=$(docker exec -i "$postgres_container_id" sh -c "psql -U blackduck -X -d bds_hub 2>&1" <<-'EOF'
+        SELECT name, setting, unit, source FROM pg_settings WHERE source <> 'default' ORDER BY name;
+EOF
+                 )
+    fi
+}
+
+################################################################
 # Gather information about database table bloat.
 #
 # Globals:
@@ -4748,6 +4779,9 @@ ${SNIPPET_BASEDIR_STATUS}
 Database bloat:
 ${DATABASE_BLOAT_INFO}
 
+Database settings:
+${DATABASE_SETTINGS}
+
 $(generate_report_section "Scan info report")
 
 Max recent scan size: $MAX_SCAN_SIZE_CHECK
@@ -5025,6 +5059,7 @@ main() {
     check_internal_hostnames_dns_status
 
     get_snippet_invalid_basedir_count
+    get_database_settings
     get_database_bloat_info
     get_scan_info_report
     get_job_info_report

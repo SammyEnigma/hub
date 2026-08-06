@@ -484,7 +484,7 @@ The container will need to expose port 5044 to other containers/services that wi
 
 ## Users/Groups
 
-This container runs as UID 100. If the container is started as UID 0 (root) then the user will be switched to UID 100:root before executing its main process.
+This container runs as UID 100.
 This container is also able to be started as a random UID as long as it is also started within the root group (GID/fsGroup 0).
 
 

@@ -44,6 +44,8 @@ spec:
         envFrom:
         - configMapRef:
             name: {{ .Release.Name }}-blackduck-config
+        - configMapRef:
+            name: {{ .Release.Name }}-binaryscanner-config
         {{- if .Values.binaryscanner.registry }}
         image: {{ .Values.binaryscanner.registry }}/bdba-worker:{{ .Values.binaryscanner.imageTag }}
         {{- else }}
